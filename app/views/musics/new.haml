@@ -1,0 +1,22 @@
+.lead
+  %h1 Create New Music
+  %hr
+.well
+  - if @music.errors.any?
+    %div
+      %strong Some issues with your music, please fix them:
+      %ul
+        - @music.errors.full_messages.each do |message|
+          %li= message
+  %form{action: '/musics', method: 'post'}
+    %div.control-group
+      %label Author:
+      %input.form-control{ name: 'author', type: 'text', value: @music.author }
+    %div.control-group
+      %label Title:
+      %input.form-control{ name: 'title', type: 'text', value: @music.title }
+    %div.control-group
+      %label URL:
+      %input.form-control{ name: 'url', type: 'text', value: @music.url }
+    %div.control-group
+      %input{ type: 'submit', value: 'Submit', class: 'btn btn-primary' }

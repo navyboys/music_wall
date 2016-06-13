@@ -1,0 +1,12 @@
+.lead
+  %h1 Music List
+  %hr
+.well
+  %ul.list-group
+    - @musics.each do |music|
+      %li.list-group-item
+        = music.title
+        %small by
+        = music.author
+        - unless music.url.empty?
+          %a{:href => music.url} [link]
