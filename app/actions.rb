@@ -64,11 +64,10 @@ post '/musics' do
   end
 end
 
-post '/vote' do
-  binding.pry
+get '/musics/:id/vote' do
   @vote = Vote.new(
     user_id: session[:user_id],
-    music_id: params[:music_id],
+    music_id: params[:id],
     vote: true
   )
   @vote.save

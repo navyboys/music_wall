@@ -2,26 +2,23 @@
 %html{lang: 'en'}
   %head
     %link{ href: '/css/bootstrap.min.css', rel: 'stylesheet' }
+    %link{ href: '/stylesheets/application.css', rel: 'stylesheet' }
     %script{ src: '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js' }
     %script{ src: '/js/bootstrap.min.js' }
     %title
   %body
-    %header
-      .navbar
-        .navbar-inner
-          %ul.nav
-            %li
-              %a{ href: '/' } Music Wall
-          - if session[:user_id]
-            .nav_item
-              %a{ href: '/musics/new', class: 'btn btn-success btn-small' } New Music
-            .nav_item
+    %nav.navbar.navbar-default
+      .container-fluid
+        .navbar-header
+          %a{ href: '/', class: 'navbar-brand' } Music Wall
+        .collapse.navbar-collapse
+          .nav.navbar-nav.navbar-right
+            - if session[:user_id]
+              %a{ href: '/musics/new', class: 'btn btn-success btn-sm navbar-btn' } New Song
               %a{ href: '/logout' } Log Out
-          - else
-            .nav_item
-              %a{ href: '/signup', class: 'btn btn-success btn-small' } Sign Up
-            .nav_item
-              %a{ href: '/login', class: 'btn btn-small' } Log In
+            - else
+              %a{ href: '/signup', class: 'btn btn-success btn-sm navbar-btn' } Sign Up
+              %a{ href: '/login' } Log In
     - flash.each do |name, msg|
       - if msg.is_a?(String)
         %div{:class => "alert alert-#{name == :notice ? "success" : "danger"}"}
