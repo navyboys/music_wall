@@ -11,6 +11,7 @@ gem 'haml'
 
 gem 'puma'
 gem 'tux'
+gem 'bcrypt'
 
 # These gems are only installed when run as `bundle install --without production`
 group :development, :test do

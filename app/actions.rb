@@ -1,3 +1,12 @@
+helpers do
+  def current_user
+    @current_user ||= User.find_by(id: session[:user_id])
+  end
+end
+
+before do
+end
+
 get '/' do
   haml :index
 end
@@ -9,6 +18,7 @@ end
 
 post '/signup' do
   @user = User.new(params)
+  @user.password = params[:password]
 
   if @user.save
     session[:user_id] = @user.id
@@ -27,6 +37,7 @@ post '/login' do
   user = User.where(email: params[:email]).first
   if  user && user.password == params[:password]
     session[:user_id] = user.id
+    flash[:notice] = "You're successfully logged in."
     redirect '/musics'
   else
     flash[:error] = "There is something wrong with your username or password."
@@ -40,9 +51,31 @@ get '/logout' do
 end
 
 get '/musics' do
-  @musics = Music.all
-  @musics = @musics.where(user_id: session[:user_id]) if session[:user_id]
+  @musics = Music.all.order(vote_count: :desc)
   haml :'musics/index'
+end
+
+get '/musics/:id' do
+  @music = Music.find_by(id: params[:id])
+  haml :'musics/show'
+end
+
+post '/musics/:id/reviews' do
+  music = Music.find_by(id: params[:id])
+  @review = Review.new(
+    user: current_user,
+    music: music,
+    rating: params[:rating],
+    content: params[:content]
+  )
+  @review.save
+  redirect "/musics/#{params[:id]}"
+end
+
+get '/musics/:music_id/reviews/:review_id' do
+  review = Review.find_by(id: params[:review_id])
+  review.destroy
+  redirect "/musics/#{params[:music_id]}"
 end
 
 get '/musics/new' do
