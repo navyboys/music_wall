@@ -2,8 +2,46 @@ get '/' do
   haml :index
 end
 
+get '/signup' do
+  @user = User.new
+  haml :'users/new'
+end
+
+post '/signup' do
+  @user = User.new(params)
+
+  if @user.save
+    session[:user_id] = @user.id
+    redirect '/login'
+  else
+    haml :'users/new'
+  end
+end
+
+get '/login' do
+  @user = User.new
+  haml :'sessions/new'
+end
+
+post '/login' do
+  user = User.where(email: params[:email]).first
+  if  user && user.password == params[:password]
+    session[:user_id] = user.id
+    redirect '/musics'
+  else
+    flash[:error] = "There is something wrong with your username or password."
+    redirect '/login'
+  end
+end
+
+get '/logout' do
+  session[:user_id] = nil
+  redirect 'musics'
+end
+
 get '/musics' do
   @musics = Music.all
+  @musics = @musics.where(user_id: session[:user_id]) if session[:user_id]
   haml :'musics/index'
 end
 
@@ -14,6 +52,7 @@ end
 
 post '/musics' do
   @music = Music.new(
+    user_id: session[:user_id],
     author: params[:author],
     title: params[:title],
     url: params[:url]
@@ -23,4 +62,15 @@ post '/musics' do
   else
     haml :'musics/new'
   end
+end
+
+post '/vote' do
+  binding.pry
+  @vote = Vote.new(
+    user_id: session[:user_id],
+    music_id: params[:music_id],
+    vote: true
+  )
+  @vote.save
+  redirect '/musics'
 end

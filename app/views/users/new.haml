@@ -1,0 +1,22 @@
+.lead
+  %h1 Sign Up
+  %hr
+.well
+  - if @user.errors.any?
+    %div
+      %strong Some issues with your music, please fix them:
+      %ul
+        - @user.errors.full_messages.each do |message|
+          %li= message
+  %form{action: '/signup', method: 'post'}
+    %div.control-group
+      %label Name:
+      %input.form-control{ name: 'name', type: 'text', value: @user.name }
+    %div.control-group
+      %label Email:
+      %input.form-control{ name: 'email', type: 'text', value: @user.email }
+    %div.control-group
+      %label Password:
+      %input.form-control{ name: 'password', type: 'password', value: @user.password }
+    %div.control-group
+      %input{ type: 'submit', value: 'Sign Up', class: 'btn btn-success' }

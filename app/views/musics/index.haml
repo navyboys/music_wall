@@ -5,8 +5,10 @@
   %ul.list-group
     - @musics.each do |music|
       %li.list-group-item
+        - if session[:user_id]
+          %a{ href: '/vote', method: 'post', class: 'btn btn-sm btn-info', music_id: music.id } vote
         = music.title
         %small by
         = music.author
         - unless music.url.empty?
-          %a{:href => music.url} [link]
+          %a{ href: music.url } [link]
