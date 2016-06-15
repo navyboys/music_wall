@@ -72,7 +72,7 @@ post '/musics/:id/reviews' do
   redirect "/musics/#{params[:id]}"
 end
 
-get '/musics/:music_id/reviews/:review_id' do
+delete '/musics/:music_id/reviews/:review_id' do
   review = Review.find_by(id: params[:review_id])
   review.destroy
   redirect "/musics/#{params[:music_id]}"

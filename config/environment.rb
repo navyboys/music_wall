@@ -17,10 +17,9 @@ APP_NAME = APP_ROOT.basename.to_s
 configure do
   set :root, APP_ROOT.to_path
   set :server, :puma
-  use Rack::MethodOverride
 
   enable :sessions
-  # set :method_override, true
+  set :method_override, true
   set :session_secret, ENV['SESSION_KEY'] || 'lighthouselabssecret'
 
   set :views, File.join(Sinatra::Application.root, "app", "views")
