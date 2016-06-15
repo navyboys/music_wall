@@ -1,0 +1,35 @@
+.lead
+  %h1 Song Detail
+  %hr
+.well
+  %p
+    = @music.title
+    %small by
+    = @music.author
+.well
+  %h3 Reviews
+  - if current_user && !current_user.reviewed?(@music)
+    %form{ action: "/musics/#{@music.id}/reviews", method: 'post' }
+      %div.control-group
+        %label Rating:
+        %select.form-control{ name: 'rating' }
+          %option 1
+          %option 2
+          %option 3
+          %option 4
+          %option 5
+      %div.control-group
+        %label Content:
+        %textarea.form-control{ name: 'content', rows: '3' }
+      %div.control-group
+        %input{ type: 'submit', value: 'Submit', class: 'btn btn-primary' }
+  %hr
+  - @music.reload.reviews.order(created_at: :desc).each do |review|
+    %p
+      = review.content
+      - if review.user == current_user
+        %form{:action => "/musics/#{@music.id}/reviews/#{review.id}", :method => "POST"}
+          %input{:name => "_method", :type => "hidden", :value => "DELETE"}
+          %input{:type => "submit", :value => "delete"}/
+          -# %a{ href: "/musics/#{@music.id}/reviews/#{review.id}" }
+          -#   delete
